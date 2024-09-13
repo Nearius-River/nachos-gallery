@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nachos Gallery</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/gallery.css">
+    <link rel="stylesheet" href="styles/message-container.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+    <input class="hidden" type="file" id="file-input" webkitdirectory multiple>
+    <div id="main-container">
+        <div class="navbar">
+            <div class="navbar-title">
+                <h1>Nachos Gallery</h1>
+            </div>
+            <div class="nav-buttons">
+                <button id="select-folder">Selecionar Pasta</button>
+                <button class="inactive display-button" id="filter" title="Filtrar Por..."><i class="fa fa-filter"></i></button>
+                <div id="filter-menu" class="sub-menu filter-menu" data-controlbutton="filter">
+                    <input id="search" placeholder="Procurar por nome..." type="text">
+                    <input id="search-date-start" placeholder="Data inicial" type="date">
+                    <input id="search-date-end" placeholder="Data final" type="date">
+                    <select id="search-file-type">
+                        <option value="">Todos os formatos</option>
+                        <option value="image/jpeg">JPEG</option>
+                        <option value="image/png">PNG</option>
+                        <option value="image/gif">GIF</option>
+                    </select>
+                    <input id="search-size-min" placeholder="Tamanho mínimo (KB)" type="number">
+                    <input id="search-size-max" placeholder="Tamanho máximo (KB)" type="number">
+                    <div class="filter-buttons">
+                        <button id="clear-filters">Limpar Filtros</button>
+                        <button id="search-btn">Buscar</button>
+                    </div>
+                </div>
+                <button class="inactive display-button" id="order-by" title="Ordenar Por..."><i class="fa fa-sort"></i></button>
+                <div id="order-menu" class="sub-menu order-menu" data-controlbutton="order-by">
+                    <button class="active" data-sort="name">Nome</button>
+                    <button data-sort="date">Data</button>
+                    <button data-sort="size">Tamanho</button>
+                    <button data-sort="format">Formato</button>
+                    <div id="sort-direction">
+                        <label>
+                            <input type="radio" name="direction" value="asc" checked>Ascendente
+                        </label>
+                        <label>
+                            <input type="radio" name="direction" value="desc">Descendente
+                        </label>
+                    </div>
+                </div>
+                <button class="inactive display-button" id="refresh-layout" title="Reajustar Exibição"><i class="fa fa-rotate-right"></i></button>
+                <button class="inactive display-button" id="reset-view" title="Limpar Exibição"><i class="fa fa-eye-slash"></i></button>
+                <button class="display-button" id="settings" title="Configurações"><i class="fa fa-gear"></i></button>
+                <div id="settings-menu" class="sub-menu settings-menu" data-controlbutton="settings">
+                    <label for="theme">Tema Preferido:</label>
+                    <select class="setting-item" id="theme">
+                        <option value="dark">Escuro</option>
+                        <option value="light">Claro</option>
+                    </select>
+                    <label for="batch-size">Imagens por Página:</label>
+                    <select class="setting-item" id="batch-size">
+                        <option value="50">50</option>
+                        <option value="100" selected>100</option>
+                        <option value="150">150</option>
+                        <option value="200">200</option>
+                        <option value="250">250</option>
+                    </select>
+                    <label>Ordem de Classificação Padrão:</label>
+                    <select class="setting-item" id="default-order">
+                        <option value="name">Nome</option>
+                        <option value="date">Data</option>
+                        <option value="size">Tamanho</option>
+                        <option value="format">Formato</option>
+                    </select>
+                    <select class="setting-item" id="default-order-direction">
+                        <option value="asc">Ascendente</option>
+                        <option value="desc">Descendente</option>
+                    </select>
+                    <label for="show-details-on-thumb">Exibir Detalhes apenas ao Clicar:</label>
+                    <input class="setting-item" id="show-details-on-thumb" type="checkbox" checked>
+                    <label for="animations-enabled">Ativar Animações:</label>
+                    <input class="setting-item" id="animations-enabled" type="checkbox" checked>
+                    <label for="thumb-size">Tamanho das Miniaturas:</label>
+                    <select class="setting-item" id="thumb-size">
+                        <option value="small">Pequeno</option>
+                        <option value="medium" selected>Médio</option>
+                        <option value="big">Grande</option>
+                    </select>
+                    <label for="default-date-format">Formato de Data Padrão:</label>
+                    <select class="setting-item" id="default-date-format">
+                        <option value="DD/MM/AAAA" selected>Dia/Mês/Ano</option>
+                        <option value="MM/DD/AAAA">Mês/Dia/Ano</option>
+                        <option value="AAAA/MM/DD">Ano/Mês/Dia</option>
+                    </select>
+                    <label for="show-progress">Exibir Progresso de Carregamento:</label>
+                    <input class="setting-item" id="show-progress" type="checkbox" checked>
+                    <button id="save-settings">Salvar Preferências</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message-container">
+            <p id="message">Parece que não há nada aqui ainda... Que tal começar adicionando uma pasta?</p>
+        </div>
+
+        <div class="gallery" id="gallery"></div>
+
+        <div class="hidden" id="gallery-bottom">
+            <div id="progress-container">
+                <progress id="progress-bar" value="0" max="100"></progress>
+                <span id="progress-text">0%</span>
+            </div>
+            <div id="pagination-controls">
+                <div class="pagination-buttons">
+                    <button class="inactive" id="previous-page">Página Anterior</button>
+                    <button class="inactive" id="current-page">Página Atual</button>
+                    <button class="inactive" id="next-page">Próxima Página</button>
+                </div>
+                <input class="hidden" id="seek-page" placeholder="Para qual página?">
+            </div>
+        </div>
+
+        <div id="image-modal" class="modal">
+            <span class="close">&times;</span>
+            <div class="modal-content">
+                <img id="modal-image" src="" alt="">
+                <div class="modal-info" id="modal-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

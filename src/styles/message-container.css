@@ -1,0 +1,11 @@
+.message-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.message-container p {
+    margin: 0;
+    font-size: 24px;
+    color: #ccc
+}
