@@ -1,4 +1,4 @@
-# Galeria de Imagens Dinâmica
+# Nachos Gallery
 
 Este projeto é uma galeria de imagens dinâmica e responsiva, que permite o carregamento de imagens diretamente de pastas do seu computador. A galeria oferece layout otimizado para visualização, utilizando **Masonry.js** e **ImagesLoaded** para garantir uma exibição fluida, e implementa técnicas de carregamento progressivo para gerenciar grandes volumes de imagens.
 
